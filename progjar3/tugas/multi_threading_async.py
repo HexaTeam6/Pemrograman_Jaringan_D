@@ -16,7 +16,8 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
-def kirim_multi_process_sync(daftar=None):
+
+def kirim_multi_thread_async(daftar=None):
     if (daftar is None):
         return False
     f = open(daftar, "rb")
@@ -27,20 +28,24 @@ def kirim_multi_process_sync(daftar=None):
     f.close()
 
 
-def multi_process_sync():
+def multi_thread_async():
     texec = dict()
-    daftar = ['testing1.jpg', 'testing2.jpg']
+    daftar = ['testing1.png', 'testing2.jpeg']
+    status_task = dict()
+    task = concurrent.futures.ThreadPoolExecutor(max_workers=4)
 
     catat_awal = datetime.datetime.now()
     for k in range(len(daftar)):
-        print(f"mengirim {daftar[k]}")
-        texec[k] = Process(target=kirim_multi_process_sync, args=(daftar[k],))
-        texec[k].start()
+        print(f"mendownload {daftar[k]}")
+        waktu = time.time()
+        texec[k] = task.submit(kirim_multi_thread_async, daftar[k])
     for k in range(len(daftar)):
-        texec[k].join()
+        status_task[k] = texec[k].result()
 
     catat_akhir = datetime.datetime.now()
     selesai = catat_akhir - catat_awal
     print(f"Waktu TOTAL yang dibutuhkan {selesai} detik {catat_awal} s/d {catat_akhir}")
+    print("hasil task yang dijalankan")
+    print(status_task)
 
-multi_process_sync()
+multi_thread_async()
