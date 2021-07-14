@@ -1,49 +1,47 @@
-
-from multiprocessing import Lock, Process, Queue, current_process
+from library import download_gambar, get_url_list
 import time
-import queue
+import socket
+import logging
+import datetime
+import threading
+import concurrent.futures
+from multiprocessing import Process, Pool
+import os
+import sys
+
+# target IP kirim_sync
+TARGET_IP = "192.168.122.255"  # Bcast = Broadcast Address
+TARGET_PORT = 5005
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+
+def kirim_multi_process_sync(daftar=None):
+    if (daftar is None):
+        return False
+    f = open(daftar, "rb")
+    l = f.read(1024)
+    while (l):
+        if (sock.sendto(l, (TARGET_IP, TARGET_PORT))):
+            l = f.read(1024)
+    f.close()
 
 
-def do_job(tasks_to_accomplish, tasks_that_are_done):
-    while True:
-        try:
-            task = tasks_to_accomplish.get_nowait()
-        except queue.Empty:
+def multi_process_sync():
+    texec = dict()
+    daftar = ['testing1.png', 'testing2.jpeg']
 
-            break
-        else:
-            print(task)
-            tasks_that_are_done.put(task + ' diselesaikan oleh proses ' + current_process().name)
-            time.sleep(.5)
-    return True
+    catat_awal = datetime.datetime.now()
+    for k in range(len(daftar)):
+        print(f"mengirim {daftar[k]}")
+        texec[k] = Process(target=kirim_multi_process_sync, args=(daftar[k],))
+        texec[k].start()
+    for k in range(len(daftar)):
+        texec[k].join()
 
+    catat_akhir = datetime.datetime.now()
+    selesai = catat_akhir - catat_awal
+    print(f"Waktu TOTAL yang dibutuhkan {selesai} detik {catat_awal} s/d {catat_akhir}")
 
-def main():
-    number_of_task = 10
-    number_of_processes = 4
-    tasks_to_accomplish = Queue()
-    tasks_that_are_done = Queue()
-    processes = []
-
-    for i in range(number_of_task):
-        tasks_to_accomplish.put("Task no " + str(i))
-
-    # buat proses
-    for w in range(number_of_processes):
-        p = Process(target=do_job, args=(tasks_to_accomplish, tasks_that_are_done))
-        processes.append(p)
-        p.start()
-
-    #jalankan proses
-    for p in processes:
-        p.join()
-
-    # tampilkan hasilnya
-    while not tasks_that_are_done.empty():
-        print(tasks_that_are_done.get())
-
-    return True
-
-
-if __name__ == '__main__':
-    main()
+multi_process_sync()
