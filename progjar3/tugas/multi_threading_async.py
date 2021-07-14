@@ -30,7 +30,7 @@ def kirim_multi_thread_async(daftar=None):
 
 def multi_thread_async():
     texec = dict()
-    daftar = ['testing1.png', 'testing2.jpeg']
+    daftar = ['testing1.jpg', 'testing2.jpg']
     status_task = dict()
     task = concurrent.futures.ThreadPoolExecutor(max_workers=4)
 

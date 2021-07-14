@@ -28,7 +28,7 @@ def kirim_multi_thread_sync(daftar=None):
 
 def multi_thread_sync():
     texec = dict()
-    daftar = ['testing1.png', 'testing2.jpeg']
+    daftar = ['testing1.jpg', 'testing2.jpg']
 
     catat_awal = datetime.datetime.now()
     for k in range(len(daftar)):

@@ -28,7 +28,7 @@ def kirim_multi_process_async(daftar=None):
 
 def multi_process_async():
     texec = dict()
-    daftar = ['testing1.png', 'testing2.jpeg']
+    daftar = ['testing1.jpg', 'testing2.jpg']
     status_task = dict()
     task_pool = Pool(processes=20)
     catat_awal = datetime.datetime.now()
