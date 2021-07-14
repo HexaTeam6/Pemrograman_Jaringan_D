@@ -30,4 +30,4 @@ class FileInterface:
 if __name__=='__main__':
     f = FileInterface()
     print(f.list())
-    print(f.get('pokijan.jpg'))
+    print(f.get('testing2.jpg'))

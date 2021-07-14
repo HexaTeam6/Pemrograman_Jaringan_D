@@ -100,7 +100,7 @@ if __name__=="__main__":
 	httpserver = HttpServer()
 	d = httpserver.proses('GET testing.txt HTTP/1.0')
 	print(d)
-	d = httpserver.proses('GET donalbebek.jpg HTTP/1.0')
+	d = httpserver.proses('GET testing1.jpg HTTP/1.0')
 	print(d)
 	#d = httpserver.http_get('testing2.txt',{})
 	#print(d)

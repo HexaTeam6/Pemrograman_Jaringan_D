@@ -41,4 +41,4 @@ if __name__=='__main__':
     #contoh pemakaian
     fp = FileProtocol()
     print(fp.proses_string("LIST"))
-    print(fp.proses_string("GET pokijan.jpg"))
+    print(fp.proses_string("GET testing2.jpg"))

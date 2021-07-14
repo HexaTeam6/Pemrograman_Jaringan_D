@@ -3,7 +3,7 @@ import datetime
 from multiprocessing import Process
 
 def download_semua():
-    nama_file = "pokijan.jpg"
+    nama_file = "testing2.jpg"
     texec = dict()
     catat_awal = datetime.datetime.now()
     for k in range(100):
